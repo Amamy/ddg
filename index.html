@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diamond Diagram Generator</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="theme-dark">
+  <div class="app-container">
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 22 8.5 12 22 2 8.5 12 2" stroke-linejoin="round"/>
+            <polyline points="2 8.5 12 13 22 8.5" />
+            <line x1="12" y1="2" x2="12" y2="13" />
+            <line x1="12" y1="13" x2="12" y2="22" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Diamond Diagram Generator</h1>
+          <span class="brand-badge">n-gon geometric generator</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Quick Presets -->
+        <div class="preset-quick-select">
+          <label for="quickPresetSelect">Preset:</label>
+          <select id="quickPresetSelect" class="form-select">
+            <option value="brilliant">Brilliant Cut Diamond</option>
+            <option value="mystic24" selected>Mystic Rose (24-gon)</option>
+            <option value="octagram">Octagram Diamond</option>
+            <option value="crownJewel">Crown Jewel Facet</option>
+            <option value="cardioid">Cardioid Diamond (64-gon)</option>
+            <option value="nephroid">Nephroid Diamond (72-gon)</option>
+            <option value="decagram">Sacred Decagram</option>
+            <option value="concentricRings">Concentric Web</option>
+          </select>
+        </div>
+
+        <button id="btnRandomize" class="btn btn-secondary" title="Generate random diamond variation">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 3 21 3 21 8" />
+            <line x1="4" y1="20" x2="21" y2="3" />
+            <polyline points="21 16 21 21 16 21" />
+            <line x1="15" y1="15" x2="21" y2="21" />
+            <line x1="4" y1="4" x2="9" y2="9" />
+          </svg>
+          Randomize
+        </button>
+
+        <button id="btnReset" class="btn btn-secondary" title="Reset to default settings">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+            <path d="M3 3v5h5" />
+          </svg>
+          Reset
+        </button>
+
+        <!-- Export Dropdown -->
+        <div class="dropdown">
+          <button id="btnExportMenu" class="btn btn-primary dropdown-toggle">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            Export Diagram
+          </button>
+          <div id="exportDropdownMenu" class="dropdown-menu hidden">
+            <div class="dropdown-header">Vector Graphics</div>
+            <button class="dropdown-item" id="exportSVG">
+              <span class="item-title">Export SVG</span>
+              <span class="item-desc">Clean vector graphic (.svg)</span>
+            </button>
+            <button class="dropdown-item" id="copySVG">
+              <span class="item-title">Copy SVG to Clipboard</span>
+              <span class="item-desc">Raw XML text</span>
+            </button>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">Raster Images</div>
+            <button class="dropdown-item" id="exportPNG1x">
+              <span class="item-title">Export PNG (Standard 1x)</span>
+              <span class="item-desc">Direct screen size</span>
+            </button>
+            <button class="dropdown-item" id="exportPNG2x">
+              <span class="item-title">Export PNG (High-Res 2x)</span>
+              <span class="item-desc">Retina & print resolution</span>
+            </button>
+            <button class="dropdown-item" id="exportPNG4x">
+              <span class="item-title">Export PNG (Ultra-Res 4x)</span>
+              <span class="item-desc">Crisp poster quality</span>
+            </button>
+            <button class="dropdown-item" id="exportJPEG">
+              <span class="item-title">Export JPEG</span>
+              <span class="item-desc">Compressed with background</span>
+            </button>
+          </div>
+        </div>
+
+        <button id="btnToggleTheme" class="btn btn-icon" title="Toggle Dark/Light Theme">
+          <svg id="iconSun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Settings Panel / Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <!-- Sidebar Navigation Tabs -->
+        <nav class="sidebar-tabs">
+          <button class="tab-btn active" data-tab="geometry">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="12 2 19 21 5 9 19 9 5 21" />
+            </svg>
+            Geometry
+          </button>
+          <button class="tab-btn" data-tab="chords">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="3" x2="21" y2="21" />
+              <line x1="3" y1="21" x2="21" y2="3" />
+              <line x1="12" y1="2" x2="12" y2="22" />
+            </svg>
+            Chords
+          </button>
+          <button class="tab-btn" data-tab="style">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+            </svg>
+            Styling
+          </button>
+          <button class="tab-btn" data-tab="facets">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 22 8.5 12 22 2 8.5 12 2" />
+            </svg>
+            Gem Facets
+          </button>
+        </nav>
+
+        <div class="sidebar-content">
+          <!-- Tab 1: Geometry -->
+          <section class="tab-panel active" id="tab-geometry">
+            <div class="section-title">Polygon & Vertices</div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="inputPoints">Points (n-gon vertices):</label>
+                <span class="control-value" id="valPoints">24</span>
+              </div>
+              <input type="range" id="inputPoints" min="3" max="96" value="24" step="1">
+              <div class="quick-chips">
+                <button type="button" class="chip" data-set-points="6">6</button>
+                <button type="button" class="chip" data-set-points="8">8</button>
+                <button type="button" class="chip" data-set-points="12">12</button>
+                <button type="button" class="chip" data-set-points="16">16</button>
+                <button type="button" class="chip" data-set-points="24">24</button>
+                <button type="button" class="chip" data-set-points="36">36</button>
+                <button type="button" class="chip" data-set-points="64">64</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="inputRadius">Outer Radius:</label>
+                <span class="control-value" id="valRadius">260 px</span>
+              </div>
+              <input type="range" id="inputRadius" min="50" max="450" value="260" step="5">
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="inputRotation">Rotation Angle:</label>
+                <span class="control-value" id="valRotation">0°</span>
+              </div>
+              <input type="range" id="inputRotation" min="0" max="360" value="0" step="1">
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="inputInnerRings">Inner Rings (Concentric):</label>
+                <span class="control-value" id="valInnerRings">0</span>
+              </div>
+              <input type="range" id="inputInnerRings" min="0" max="6" value="0" step="1">
+            </div>
+
+            <div class="control-group" id="ringRatioGroup" style="display: none;">
+              <div class="control-label-row">
+                <label for="inputRingRatio">Inner Ring Scale:</label>
+                <span class="control-value" id="valRingRatio">0.50</span>
+              </div>
+              <input type="range" id="inputRingRatio" min="0.1" max="0.95" value="0.5" step="0.05">
+            </div>
+
+            <div class="section-title">Vertex Markers</div>
+
+            <div class="control-group switch-group">
+              <label for="checkShowVertices">Show Vertex Points</label>
+              <input type="checkbox" id="checkShowVertices" checked class="custom-switch">
+            </div>
+
+            <div class="control-group" id="vertexSettings">
+              <div class="control-row">
+                <div>
+                  <label for="inputVertexRadius">Size:</label>
+                  <input type="number" id="inputVertexRadius" min="1" max="15" value="4" class="form-input-sm">
+                </div>
+                <div>
+                  <label for="inputVertexColor">Color:</label>
+                  <input type="color" id="inputVertexColor" value="#38bdf8" class="form-color">
+                </div>
+              </div>
+
+              <div class="control-group switch-group mt-2">
+                <label for="checkShowLabels">Show Vertex Numbers</label>
+                <input type="checkbox" id="checkShowLabels" class="custom-switch">
+              </div>
+            </div>
+          </section>
+
+          <!-- Tab 2: Chords & Connections -->
+          <section class="tab-panel" id="tab-chords">
+            <div class="section-title">Connection Mode</div>
+
+            <div class="connection-modes">
+              <label class="mode-card">
+                <input type="radio" name="connectMode" value="complete" checked>
+                <div class="mode-info">
+                  <span class="mode-name">Complete Graph (Mystic Rose)</span>
+                  <span class="mode-desc">Connect every vertex to every other vertex for a full diamond mesh.</span>
+                </div>
+              </label>
+
+              <label class="mode-card">
+                <input type="radio" name="connectMode" value="star">
+                <div class="mode-info">
+                  <span class="mode-name">Star Polygon (Skip-k)</span>
+                  <span class="mode-desc">Connect each vertex to $(i \pm k)$ with optional layered steps.</span>
+                </div>
+              </label>
+
+              <label class="mode-card">
+                <input type="radio" name="connectMode" value="modular">
+                <div class="mode-info">
+                  <span class="mode-name">Modular Multiplication (Times Table)</span>
+                  <span class="mode-desc">Connect $i \to (i \times m) \pmod n$ producing cardioids & mandalas.</span>
+                </div>
+              </label>
+
+              <label class="mode-card">
+                <input type="radio" name="connectMode" value="adjacent">
+                <div class="mode-info">
+                  <span class="mode-name">Perimeter + Spoke Web</span>
+                  <span class="mode-desc">Outer polygon edge ring with center radiating spokes.</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Mode Specific Settings -->
+            <div id="starSettings" class="mode-options-panel" style="display: none;">
+              <div class="section-title">Star Polygon Parameters</div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="inputStarStep">Step Interval (k):</label>
+                  <span class="control-value" id="valStarStep">5</span>
+                </div>
+                <input type="range" id="inputStarStep" min="1" max="32" value="5" step="1">
+              </div>
+
+              <div class="control-group switch-group">
+                <label for="checkStarLayered">All Steps Up To k (Layered Star)</label>
+                <input type="checkbox" id="checkStarLayered" class="custom-switch">
+              </div>
+            </div>
+
+            <div id="modularSettings" class="mode-options-panel" style="display: none;">
+              <div class="section-title">Modular Parameters</div>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="inputMultiplier">Multiplier (m):</label>
+                  <span class="control-value" id="valMultiplier">2.0</span>
+                </div>
+                <input type="range" id="inputMultiplier" min="2" max="30" value="2" step="0.1">
+              </div>
+              <div class="quick-chips">
+                <button type="button" class="chip" data-set-mult="2">2 (Cardioid)</button>
+                <button type="button" class="chip" data-set-mult="3">3 (Nephroid)</button>
+                <button type="button" class="chip" data-set-mult="4">4 (Trefoil)</button>
+                <button type="button" class="chip" data-set-mult="5">5</button>
+              </div>
+            </div>
+
+            <div class="section-title">Chord Filter</div>
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="inputChordDensity">Chord Density / Skip:</label>
+                <span class="control-value" id="valChordDensity">1 (All)</span>
+              </div>
+              <input type="range" id="inputChordDensity" min="1" max="10" value="1" step="1">
+            </div>
+
+            <div class="control-group switch-group">
+              <label for="checkShowOuterRing">Draw Outer Boundary Ring</label>
+              <input type="checkbox" id="checkShowOuterRing" checked class="custom-switch">
+            </div>
+          </section>
+
+          <!-- Tab 3: Style -->
+          <section class="tab-panel" id="tab-style">
+            <div class="section-title">Line Styling</div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="inputLineWidth">Line Width:</label>
+                <span class="control-value" id="valLineWidth">1.0 px</span>
+              </div>
+              <input type="range" id="inputLineWidth" min="0.2" max="6.0" value="1.0" step="0.2">
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="inputLineOpacity">Line Opacity:</label>
+                <span class="control-value" id="valLineOpacity">70%</span>
+              </div>
+              <input type="range" id="inputLineOpacity" min="5" max="100" value="70" step="5">
+            </div>
+
+            <div class="control-group">
+              <label for="selectColorMode">Color Palette Mode:</label>
+              <select id="selectColorMode" class="form-select">
+                <option value="single">Single Solid Color</option>
+                <option value="length">Gradient by Chord Length</option>
+                <option value="angle">Rainbow Spectrum (by Angle)</option>
+                <option value="dual">Two-Tone Gradient</option>
+                <option value="diamondCyan">Diamond Ice Cyan</option>
+                <option value="gemGold">Royal Gold & Amber</option>
+                <option value="cyberNeon">Cyber Neon Purple/Pink</option>
+              </select>
+            </div>
+
+            <div class="control-row mt-2" id="colorPickerRow">
+              <div id="primaryColorGroup">
+                <label for="inputLineColor">Primary Color:</label>
+                <input type="color" id="inputLineColor" value="#38bdf8" class="form-color">
+              </div>
+              <div id="secondaryColorGroup" style="display: none;">
+                <label for="inputLineColor2">Secondary Color:</label>
+                <input type="color" id="inputLineColor2" value="#ec4899" class="form-color">
+              </div>
+            </div>
+
+            <div class="control-group mt-3">
+              <label for="selectDashStyle">Line Dash Pattern:</label>
+              <select id="selectDashStyle" class="form-select">
+                <option value="solid">Solid Line</option>
+                <option value="dashed">Dashed (6, 4)</option>
+                <option value="dotted">Dotted (2, 4)</option>
+                <option value="longdash">Long Dash (12, 6)</option>
+              </select>
+            </div>
+
+            <div class="control-group switch-group">
+              <label for="checkGlowEffect">Diamond Neon Glow</label>
+              <input type="checkbox" id="checkGlowEffect" class="custom-switch">
+            </div>
+
+            <div class="section-title">Canvas & Background</div>
+
+            <div class="control-group">
+              <label for="selectCanvasTheme">Background Style:</label>
+              <select id="selectCanvasTheme" class="form-select">
+                <option value="#090d16">Deep Space Navy (#090d16)</option>
+                <option value="#000000">OLED Black (#000000)</option>
+                <option value="#18181b">Dark Zinc Slate (#18181b)</option>
+                <option value="#ffffff">Clean White (#ffffff)</option>
+                <option value="#f8fafc">Soft Paper Gray (#f8fafc)</option>
+                <option value="custom">Custom Color...</option>
+              </select>
+            </div>
+
+            <div class="control-group" id="customBgColorGroup" style="display: none;">
+              <label for="inputCustomBgColor">Custom Background Color:</label>
+              <input type="color" id="inputCustomBgColor" value="#090d16" class="form-color">
+            </div>
+
+            <div class="control-group switch-group">
+              <label for="checkShowGrid">Show Background Grid</label>
+              <input type="checkbox" id="checkShowGrid" checked class="custom-switch">
+            </div>
+
+            <div class="control-group switch-group">
+              <label for="checkTransparentExport">Transparent Background on Export</label>
+              <input type="checkbox" id="checkTransparentExport" class="custom-switch">
+            </div>
+          </section>
+
+          <!-- Tab 4: Gem Facets (Diamond Cut Generator) -->
+          <section class="tab-panel" id="tab-facets">
+            <div class="section-title">Brilliant Cut Diamond Faceting</div>
+            <p class="section-description">
+              Overlay authentic gemstone facet lines: table, star facets, kite bezel facets, and pavilion radiating geometry.
+            </p>
+
+            <div class="control-group switch-group">
+              <label for="checkEnableFacets">Enable Gem Cut Facet Overlay</label>
+              <input type="checkbox" id="checkEnableFacets" class="custom-switch">
+            </div>
+
+            <div id="facetControls" style="display: none;">
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="inputTableRatio">Table Ratio (Center Flat):</label>
+                  <span class="control-value" id="valTableRatio">55%</span>
+                </div>
+                <input type="range" id="inputTableRatio" min="20" max="85" value="55" step="1">
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="inputStarFacetRatio">Star Facet Depth:</label>
+                  <span class="control-value" id="valStarFacetRatio">75%</span>
+                </div>
+                <input type="range" id="inputStarFacetRatio" min="40" max="95" value="75" step="1">
+              </div>
+
+              <div class="control-group switch-group">
+                <label for="checkFacetFills">Shimmer Face Fills (Translucent)</label>
+                <input type="checkbox" id="checkFacetFills" checked class="custom-switch">
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="inputFacetFillOpacity">Shimmer Opacity:</label>
+                  <span class="control-value" id="valFacetFillOpacity">15%</span>
+                </div>
+                <input type="range" id="inputFacetFillOpacity" min="5" max="60" value="15" step="5">
+              </div>
+
+              <div class="control-group">
+                <label for="inputFacetLineColor">Facet Line Color:</label>
+                <input type="color" id="inputFacetLineColor" value="#7dd3fc" class="form-color">
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Sidebar Footer Status -->
+        <div class="sidebar-footer">
+          <div class="stat-item">
+            <span class="stat-label">Vertices:</span>
+            <span class="stat-val" id="statVertices">24</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Chords:</span>
+            <span class="stat-val" id="statChords">276</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Zoom:</span>
+            <span class="stat-val" id="statZoom">100%</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Canvas Preview Area -->
+      <section class="canvas-wrapper">
+        <!-- Floating Canvas Toolbar -->
+        <div class="canvas-toolbar">
+          <div class="toolbar-group">
+            <button id="btnZoomIn" class="btn btn-icon-sm" title="Zoom In (+)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <line x1="11" y1="8" x2="11" y2="14" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </svg>
+            </button>
+            <button id="btnZoomOut" class="btn btn-icon-sm" title="Zoom Out (-)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </svg>
+            </button>
+            <button id="btnResetView" class="btn btn-icon-sm" title="Reset View (100% / Center)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h6v6" />
+                <path d="M9 21H3v-6" />
+                <path d="M21 3l-7 7" />
+                <path d="M3 21l7-7" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="toolbar-divider"></div>
+
+          <div class="toolbar-group">
+            <button id="btnAnimateSpin" class="btn btn-toggle-sm" title="Toggle Auto-Rotation">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67" />
+              </svg>
+              <span>Rotate</span>
+            </button>
+          </div>
+
+          <div class="toolbar-divider"></div>
+
+          <div class="toolbar-group interactive-hint">
+            <span class="hint-dot"></span>
+            <span>Drag to pan &bull; Scroll to zoom &bull; Hover vertex to highlight chords</span>
+          </div>
+        </div>
+
+        <!-- Drawing Canvas -->
+        <div class="canvas-container" id="canvasContainer">
+          <canvas id="diagramCanvas"></canvas>
+          <div id="vertexTooltip" class="vertex-tooltip hidden">Vertex 0</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="toast hidden">Copied to clipboard!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
